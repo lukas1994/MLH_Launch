@@ -66,15 +66,20 @@
                 </string>
                 <string name="discoverable" >Make discoverable
                 </string>
-                <string name="insecure_connect" >Connect a device - Insecure
-                </string>
                 <string name="none_found" >No devices found
                 </string>
-                <string name="button_scan" >Scan for devices
+                <string name="insecure_connect" >Connect a device - Insecure
                 </string>
                 <string name="app_name" >Bluetooth Chat
                 </string>
+                <string name="button_scan" >Scan for devices
+                </string>
             </file>
+            <file
+                name="edit_profile"
+                path="/Users/lukaskoebis/Dropbox/CODE/MLH_Launch/BluetoothChat/app/src/main/res/layout/edit_profile.xml"
+                qualifiers=""
+                type="layout" />
         </source>
         <source path="/Users/lukaskoebis/Dropbox/CODE/MLH_Launch/BluetoothChat/app/build/generated/res/rs/debug" />
         <source path="/Users/lukaskoebis/Dropbox/CODE/MLH_Launch/BluetoothChat/app/build/generated/res/generated/debug" />

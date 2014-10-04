@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * Created by Joshua on 04/10/14.
@@ -18,6 +19,9 @@ import android.widget.Button;
 public class EditProfileActivity extends Activity implements View.OnClickListener {
 
     public static final int IMAGE_PICKER_SELECT = 1;
+
+    private ImageView img;
+    private String selectedImagePath;
 
 
 
@@ -37,6 +41,8 @@ public class EditProfileActivity extends Activity implements View.OnClickListene
             case IMAGE_PICKER_SELECT:
                 Uri selectedImageUri = data.getData();
                 Log.e("Edit", selectedImageUri.toString());
+                //selectedImagePath = getPath()
+
                 break;
         }
     }

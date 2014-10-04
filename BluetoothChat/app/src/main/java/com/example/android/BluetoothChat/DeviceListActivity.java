@@ -64,6 +64,7 @@ public class DeviceListActivity extends Activity implements OnClickListener {
 
     // UI
     private Button mNextButton;
+    private Button mEditProfileButton;
     private Button mChatButton;
     private TextView mTextView;
 
@@ -86,6 +87,9 @@ public class DeviceListActivity extends Activity implements OnClickListener {
         mChatButton = (Button) findViewById(R.id.chat_button);
         mChatButton.setVisibility(View.GONE);
         mChatButton.setOnClickListener(this);
+
+        mEditProfileButton = (Button) findViewById(R.id.edit_profile_button);
+        mEditProfileButton.setOnClickListener(this);
 
         mTextView = (TextView) findViewById(R.id.text_view);
         mTextView.setText("No people found :(");
