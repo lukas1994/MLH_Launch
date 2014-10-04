@@ -3,9 +3,11 @@ package com.example.android.BluetoothChat;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -41,10 +43,18 @@ public class EditProfileActivity extends Activity implements View.OnClickListene
             case IMAGE_PICKER_SELECT:
                 Uri selectedImageUri = data.getData();
                 Log.e("Edit", selectedImageUri.toString());
-                selectedImagePath = getPath()
-
+                selectedImagePath = getPath(selectedImageUri);
+                img.setImageURI(selectedImageUri);
                 break;
         }
+    }
+
+    public String getPath(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 
 
