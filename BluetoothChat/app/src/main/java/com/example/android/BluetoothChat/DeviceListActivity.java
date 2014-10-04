@@ -32,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -48,6 +49,9 @@ public class DeviceListActivity extends Activity implements OnClickListener {
     // Debugging
     private static final String TAG = "DeviceListActivity";
     private static final boolean D = true;
+
+    // Intent request codes
+    private static final int REQUEST_ENABLE_BT = 3;
 
     // Return Intent extra
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
@@ -97,11 +101,32 @@ public class DeviceListActivity extends Activity implements OnClickListener {
         // Get the local Bluetooth adapter
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
+        // If the adapter is null, then Bluetooth is not supported
+        if (mBtAdapter == null) {
+            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
         // Set up empty blacklits
         mBacklist = new HashSet<String>();
+    }
 
-        // Try to find next person
-        findNextPerson();
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(D) Log.e(TAG, "++ ON START ++");
+
+        // If BT is not on, request that it be enabled.
+        // setupChat() will then be called during onActivityResult
+        if (!mBtAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            // Otherwise, setup the chat session
+        } else {
+            // Try to find next person
+            findNextPerson();
+        }
     }
 
     @Override
@@ -196,11 +221,31 @@ public class DeviceListActivity extends Activity implements OnClickListener {
                 // Create the result Intent and include the MAC address
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_DEVICE_ADDRESS, mCurrentConnection.getAddress());
-
-                // Set result and finish this Activity
-                setResult(Activity.RESULT_OK, intent);
+                startActivity(intent);
 
                 break;
+            case R.id.edit_profile_button:
+                Intent intent = new Intent(this, );
+                startActivity(intent);
+                break;
+
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(D) Log.d(TAG, "onActivityResult " + resultCode);
+        switch (requestCode) {
+            case REQUEST_ENABLE_BT:
+                // When the request to enable Bluetooth returns
+                if (resultCode == Activity.RESULT_OK) {
+                    // Try to find next person
+                    findNextPerson();
+                } else {
+                    // User did not enable Bluetooth or an error occurred
+                    Log.d(TAG, "BT not enabled");
+                    Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
         }
     }
 }
