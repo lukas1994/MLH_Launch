@@ -81,7 +81,7 @@ public class BluetoothChat extends Activity {
         super.onCreate(savedInstanceState);
         if(D) Log.e(TAG, "+++ ON CREATE +++");
 
-        // Set up the window layout
+        // Set up the window edit_profile
         setContentView(R.layout.chat);
 
         // Get local Bluetooth adapter
@@ -150,6 +150,7 @@ public class BluetoothChat extends Activity {
                 sendMessage(message);
             }
         });
+
 
         // Initialize the BluetoothChatService to perform bluetooth connections
         mChatService = new BluetoothChatService(this, mHandler);
