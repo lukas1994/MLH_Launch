@@ -27,4 +27,4 @@
           android:title="@string/discoverable"
           android:showAsAction="ifRoom|withText" />
 </menu>
-<!-- From: file:/Users/lukaskoebis/Dropbox/CODE/MLH_Launch/BluetoothChat/app/src/main/res/menu/option_menu.xml -->
+<!-- From: file:/Users/Joshua/Documents/MLH_Launch/BluetoothChat/app/src/main/res/menu/option_menu.xml -->
