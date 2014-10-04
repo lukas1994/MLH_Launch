@@ -225,8 +225,8 @@ public class DeviceListActivity extends Activity implements OnClickListener {
 
                 break;
             case R.id.edit_profile_button:
-                Intent intent = new Intent(this, );
-                startActivity(intent);
+                Intent intent2 = new Intent(this, EditProfileActivity.class);
+                startActivity(intent2);
                 break;
 
         }

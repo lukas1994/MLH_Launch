@@ -4,5 +4,5 @@
 .DS_Store
 /build
 /BluetoothChat/app/build
-/BluetoothChat/.idea
+/BluetoothChat/.idea/workspace.xml
 /BluetoothChat/local.properties
