@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="main" >
+        <source path="/Users/lukaskoebis/Dropbox/CODE/MLH_Launch/BluetoothChat/app/src/main/assets" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/Users/lukaskoebis/Dropbox/CODE/MLH_Launch/BluetoothChat/app/src/debug/assets" />
+    </dataSet>
+
+</merger>
