@@ -144,6 +144,7 @@ g:hover, text:hover {
 
 </style>
 <script type="text/javascript">
+var name;
 
 function graph(delay){
 	var width = 1440,
@@ -160,7 +161,7 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("miserables.json", function(error, graph) {
+d3.json("/data/" + name, function(error, graph) {
   force
       .nodes(graph.nodes)
       .links(graph.links)
@@ -215,6 +216,7 @@ var labels = gnodes.append("svg:a")
 $(document).ready(function(){
 
 $('.textbox').keyup(function(e){
+	name = $('.textbox').val();
     if(e.keyCode == 13)
     {
       $('.textbox').delay(250).animate({
