@@ -31,8 +31,10 @@ def search(author):
 			docs = map(lambda x: map(lambda a: a.last_name.capitalize().split(' ')[0], x.authors), session.catalog.advanced_search(author=author).list(10).items)
 			iterDocs = session.catalog.advanced_search(author=author, view = 'all').iter()
 
-		for i in range(1,25):
-			v = iterDocs.next()
+		for i in range(1,2):
+			v = False
+			if iterDocs.__sizeof__() > 0:
+				v = iterDocs.next()
 			if v:
 				views += v.reader_count
 
@@ -73,23 +75,22 @@ def search(author):
 
 	return {"nodes": nodes, "links": links}
 
-print json.dumps(search("Knuth"))
+#print json.dumps(search("Knuth"))
 
-#from flask import Flask
-#app = Flask(__name__)
-#
-#@app.route('/')
-#def root():
-#	return app.send_static_file('index.html')
-#
-#@app.route('/data/<author>')
-#def hello_world(author):	
-# 	return json.dumps(search(author))
-#
-#
-#url_for('static', filename='index.html')
-#
-#if __name__ == '__main__':
-#    app.run()
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def root():
+	return app.send_static_file('index.html')
+
+@app.route('/data/<author>')
+def hello_world(author):	
+	return json.dumps(search(author))
+
+
+
+if __name__ == '__main__':
+   app.run(debug=True)
 
 

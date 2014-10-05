@@ -80,12 +80,26 @@ table {
     top: 42%;  /* position the top  edge of the element at the middle of the parent */
     left: 50%; /* position the left edge of the element at the middle of the parent */
     transform: translate(-50%, -50%); 
+    z-index: 0;
+}
+
+.loading {
+	background: url('loading.gif');
+	width: 300px;
+	height: 173px;
+	position: absolute;
+	z-index: 2;
+	top: 42%;  /* position the top  edge of the element at the middle of the parent */
+    left: 50%; /* position the left edge of the element at the middle of the parent */
+    transform: translate(-50%, -50%); 
+    display: none;
+    opacity: 0;
 }
 
 .textbox {
 	width: 43%;
 	background: white;
-	box-shadow: 0px 1px 2px rgba(25,26,30,1);
+	box-shadow: 0px 2px 2px rgba(25,26,30,0.9);
 	height: 60px;
 	position: absolute;
 	top: 55%;
@@ -156,7 +170,7 @@ g:hover, text:hover {
 <script type="text/javascript">
 var name;
 
-var map = [14,11,8,6,4,2];
+var map = [16,12,9,6,4,3];
 
 function graph(delay){
 	var width = 1440,
@@ -174,6 +188,7 @@ var svg = d3.select("body").append("svg")
     .attr("height", height);
 
 d3.json("/data/" + name, function(error, graph) {
+	$('.loading').remove();
   force
       .nodes(graph.nodes)
       .links(graph.links)
@@ -196,7 +211,7 @@ var node = gnodes.append("svg:a")
   .attr("xlink:show", "new")
   .append("circle")
   .attr("class", "node")
-  .attr("r", function(d){return d.views; })
+  .attr("r", function(d){return map[d.group]; })
   .style("fill", function(d) { return color(d.group); })
   .call(force.drag);
 
@@ -227,6 +242,8 @@ var labels = gnodes.append("svg:a")
 
 $(document).ready(function(){
 
+$('.textbox').select();
+
 $('.textbox').keyup(function(e){
 	name = $('.textbox').val();
     if(e.keyCode == 13)
@@ -242,6 +259,10 @@ $('.textbox').keyup(function(e){
 	   opacity: "0.0",
 	  }, 300, function() {
 	  	$('.erdos').css('display','none');
+	  	$('.loading').delay(500).css('display', 'block');
+	  });
+	  $('.loading').delay(700).animate({
+	  	opacity: 1,
 	  });
     }
 });
@@ -250,8 +271,7 @@ $('.textbox').keyup(function(e){
 </script>
 <body>
 
-<img src="loading.gif">
-
+<div class="loading"></div>
 <div class="erdos"></div>
 
 <input type="text" class="textbox" placeholder="Enter author's name"></div>
