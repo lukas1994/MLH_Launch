@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:xlink="http://www.w3.org/1999/xlink">
 <meta charset="utf-8">
 
 <head>
@@ -73,7 +73,6 @@ table {
 }
 
 .erdos {
-	display:none;
 	background: url('erdos.png');
 	width: 513px;
 	height: 683px;
@@ -105,6 +104,7 @@ table {
 }
 
 svg {
+	text-align: center;
 	display: block;
 	margin: 0 auto;
 }
@@ -120,6 +120,7 @@ body {
 .node {
   stroke: rgba(255,255,255,0.8);
   stroke-width: 1.5px;
+  cursor: pointer;
 }
 
 .link {
@@ -128,24 +129,30 @@ body {
 }
 
 text {
-	fill: white;
+	fill: rgba(255,255,255,0.8);
 	stroke: rgba(255,255,255,0);
 	font-family: 'Fira Sans';
 	font-weight: 100;
+	font-size: 0.8em;
 	-webkit-font-smoothing: antialiased;
+}
+
+g:hover, text:hover {
+	font-weight: 500 !important;
+	color: white;
 }
 
 </style>
 <script type="text/javascript">
 
 function graph(delay){
-	var width = 960,
-    height = 500;
+	var width = 1440,
+    height = 705;
 
 var color = d3.scale.category20();
 
 var force = d3.layout.force()
-    .charge(-150)
+    .charge(-250)
     .linkDistance(100)
     .size([width, height]);
 
@@ -171,14 +178,22 @@ var gnodes = svg.selectAll('g.gnode')
   .append('g')
   .classed('gnode', true);
 
-var node = gnodes.append("circle")
+var node = gnodes.append("svg:a")
+  .attr("xlink:href", function(d){return 'http://www.mendeley.com/research-papers/search/?author='+d.name;})
+  .attr("xlink:show", "new")
+  .append("circle")
   .attr("class", "node")
-  .attr("r", 5)
+  .attr("r", 8)
   .style("fill", function(d) { return color(d.group); })
   .call(force.drag);
 
-var labels = gnodes.append("text")
-  .text(function(d) { return d.name; });
+var labels = gnodes.append("svg:a")
+  .attr("xlink:href", function(d){return 'http://www.mendeley.com/research-papers/search/?author='+d.name;})
+  .attr("xlink:show", "new")
+  .append("text")
+  .text(function(d) { return d.name; })
+  .attr("dy","-15")
+  .attr("dx","-20");
 
   force.on("tick", function() {
   // Update the links
@@ -191,12 +206,14 @@ var labels = gnodes.append("text")
   gnodes.attr("transform", function(d) { 
     return 'translate(' + [d.x, d.y] + ')'; 
   });    
+
   });    
 });
 
 }
 
 $(document).ready(function(){
+
 $('.textbox').keyup(function(e){
     if(e.keyCode == 13)
     {
@@ -210,6 +227,7 @@ $('.textbox').keyup(function(e){
 	  $('.erdos').animate({
 	   opacity: "0.0",
 	  }, 300, function() {
+	  	$('.erdos').css('display','none');
 	  });
     }
 });
