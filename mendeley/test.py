@@ -4,53 +4,73 @@ import json
 mendeley = Mendeley("938", "bkzasRJgHn9tcvT3")
 session = mendeley.start_client_credentials_flow().authenticate()
 
+
 highest_index = 0
-visited = []
-nodes = []
-links = []
 
-def search(author, dist = 0):
+def search(author):
 	global highest_index
+	highest_index = 0
+	visited = []
+	nodes = []
+	links = []
 
-	author = author.encode('utf-8')
+	def dfs(author, dist = 0):
+		global highest_index
+		author = author.encode('utf-8')
+		author = author.split(' ')[0]
+		author = author.capitalize()
 
-	if dist >= 4:
-		return
-	if author in visited:
-		return
-	visited.append(author)
+		print author, dist
 
-	nodes.append({'name': author, 'group': 1})
+		if dist >= 5:
+			return
+		if author in visited:
+			return
+		visited.append(author)
 
-	docs = map(lambda x: map(lambda a: a.last_name, x.authors), session.catalog.advanced_search(author=author).list(100).items)
-	coauthors = []
+		nodes.append({'name': author, 'group': dist})
 
-	for doc in docs:
-		others = filter(lambda a: False if a == author else True, doc)
-		if len(others) == len(doc):
-			continue
-		coauthors += others
+		docs = map(lambda x: map(lambda a: a.last_name.capitalize().split(' ')[0], x.authors), session.catalog.advanced_search(author=author).list(10).items)
+		print len(docs)
+		coauthors = []
 
-	coauthors = coauthors[:8]
+		for doc in docs:
+			others = filter(lambda a: False if a == author else True, doc)
+			#if len(others) == len(doc):
+			#	continue
+			coauthors += others
 
-	my_idx = highest_index
-	highest_index += 1
-	for co in set(coauthors):
-		idx = search(co, dist+1)
-		if idx:
-			links.append({'source': my_idx, 'target': idx, 'value': 1, 'weight':1})
+		coauthors = coauthors[:3]
 
-	return my_idx
+		print len(coauthors)
+
+		my_idx = highest_index
+		highest_index += 1
+		for co in set(coauthors):
+			idx = dfs(co, dist+1)
+			if idx:
+				links.append({'source': my_idx, 'target': idx, 'value': 1})
+
+		return my_idx
+
+	dfs(author)
+
+	return {"nodes": nodes, "links": links}
 
 
 from flask import Flask
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
+
+@app.route('/')
+def root():
+	return app.send_static_file('index.html')
 
 @app.route('/data/<author>')
 def hello_world(author):
-	print author
-	search(author)
-	return json.dumps({"nodes": nodes, "links": links})
+ 	print "search for:", author
+	
+ 	return json.dumps(search(author))
+
 
 #url_for('static', filename='index.html')
 
