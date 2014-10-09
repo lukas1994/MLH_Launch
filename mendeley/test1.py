@@ -21,8 +21,7 @@ def search(author):
 		author = author.encode('utf-8')
 		subject = ""
 		views = 0
-		authorSplit = author.split()
-		author = authorSplit[0].capitalize()
+		author = author.split[0].capitalize()
 		docs = map(lambda x: map(lambda a: a.last_name.capitalize().split(' ')[0], x.authors), session.catalog.advanced_search(author=author).list(10).items)
 		iterDocs = session.catalog.advanced_search(author=author, view = 'all').iter()
 
