@@ -21,31 +21,30 @@ def search(author):
 		author = author.encode('utf-8')
 		subject = ""
 		views = 0
-		author = author.split[0].capitalize()
+		author = author.split()[0].capitalize()
+		
+		#Return if we've already seen author or if depth is large enough.
+		if (dist >= 5 or author in visited):
+			return
+		visited.append(author)
+		
+		#API calls and modifications to objects received.
 		docs = map(lambda x: map(lambda a: a.last_name.capitalize().split(' ')[0], x.authors), session.catalog.advanced_search(author=author).list(10).items)
 		iterDocs = session.catalog.advanced_search(author=author, view = 'all').iter()
 
+		#Range for how many documents we obtain per author. For each document we obtain the reader_count and increment views accordingly.
 		for i in range(1,2):
-			v = False
-			if iterDocs.__sizeof__() > 0:
-				v = iterDocs.next()
-			if v:
-				views += v.reader_count
-
-		if dist >= 5:
-			return
-		if author in visited:
-			return
-		visited.append(author)
-
+			try:
+				views += iterDocs.next().reader_count
+			except StopIteration:
+				break;
+		#Append the node.
 		nodes.append({'name': author, 'group': dist, 'views': views})
 
 		coauthors = []
 
 		for doc in docs:
 			others = filter(lambda a: False if a == author else True, doc)
-			#if len(others) == len(doc):
-			#	continue
 			coauthors += others
 
 		coauthors = coauthors[:3]
@@ -69,7 +68,6 @@ def search(author):
 
 	return {"nodes": nodes, "links": links}
 
-#print json.dumps(search("Knuth"))
 
 from flask import Flask
 app = Flask(__name__)
