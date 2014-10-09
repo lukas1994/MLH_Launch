@@ -23,13 +23,8 @@ def search(author):
 		views = 0
 		authorSplit = author.split()
 		author = authorSplit[0].capitalize()
-		if len(authorSplit) > 1:
-			subject = authorSplit[1]
-			docs = map(lambda x: map(lambda a: a.last_name.capitalize().split(' ')[0], x.authors), session.catalog.advanced_search(author=author, abstract=subject).list(10).items)
-			iterDocs = session.catalog.advanced_search(author=author, abstract=subject, view = 'all').iter()
-		else:
-			docs = map(lambda x: map(lambda a: a.last_name.capitalize().split(' ')[0], x.authors), session.catalog.advanced_search(author=author).list(10).items)
-			iterDocs = session.catalog.advanced_search(author=author, view = 'all').iter()
+		docs = map(lambda x: map(lambda a: a.last_name.capitalize().split(' ')[0], x.authors), session.catalog.advanced_search(author=author).list(10).items)
+		iterDocs = session.catalog.advanced_search(author=author, view = 'all').iter()
 
 		for i in range(1,2):
 			v = False
